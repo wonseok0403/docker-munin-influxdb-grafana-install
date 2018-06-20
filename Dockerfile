@@ -9,18 +9,18 @@ RUN apt-get update -qq && RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
 RUN rm /etc/nginx/sites-enabled/default && mkdir -p /var/cache/munin/www && chown munin:munin /var/cache/munin/www && mkdir -p /var/run/munin && chown -R munin:munin /var/run/munin
 
 # InfluxDB Install
-RUN curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-RUN source /etc/lsb-release
-RUN echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
-RUN sudo apt-get update && sudo apt-get install influxdb
-RUN sudo service influxdb start
-RUN sudo printf "CREATE DATABASE munin_db\nCREATE USER admin WITH PASSWORD 'admin' WITH ALL PRIVILEGES\nCREATE USER grafana WITH PASSWORD 'grafana'\nGRANT ALL ON munin_db TO grafana\nexit">cartaro.sql
-RUN influxdb -execute CREATE DATABASE munin_db
-RUN influxdb -execute CREATE USER admin WITH PASSWORD 'admin' WITH ALL PRIVILEGES
-RUN influxdb -execute CREATE USER grafana WITH PASSWORD 'grafana'
-RUN influxdb -execute GRANT ALL ON munin_db TO grafana
-RUN sed 's#[http]#[http]\nenabled=true\nbind-address=":8086"#g'
-RUN systemctl restart influxdb.service
+RUN /bin/bash -c "curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -"
+RUN /bin/bash -c "source /etc/lsb-release"
+RUN /bin/bash -c 'echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list'
+RUN /bin/bash -c "sudo apt-get update && sudo apt-get install influxdb"
+RUN /bin/bash -c "sudo service influxdb start"
+#RUN /bin/bash -c "sudo printf "CREATE DATABASE munin_db\nCREATE USER admin WITH PASSWORD 'admin' WITH ALL PRIVILEGES\nCREATE USER grafana WITH PASSWORD 'grafana'\nGRANT ALL ON munin_db TO grafana\nexit>cartaro.sql'
+RUN /bin/bash -c "influxdb -execute CREATE DATABASE munin_db"
+RUN /bin/bash -c "influxdb -execute CREATE USER admin WITH PASSWORD 'admin' WITH ALL PRIVILEGES"
+RUN /bin/bash -c "influxdb -execute CREATE USER grafana WITH PASSWORD 'grafana'"
+RUN /bin/bash -c "influxdb -execute GRANT ALL ON munin_db TO grafana"
+RUN /bin/bash -c '"sed 's#[http]#[http]\nenabled=true\nbind-address=":8086"#g'"'
+RUN /bin/bash -c "systemctl restart influxdb.service"
 
 # Grafana install
 RUN wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_5.1.3_amd64.deb
