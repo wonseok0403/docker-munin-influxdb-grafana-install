@@ -16,7 +16,7 @@ set nodes:="'$nodes'"
 echo $muninuser
 echo $muninpw
 echo $nodes
-docker run -d \
+docker run -d --name muninserver \
 -p 8080:8080 \
 -p 3000:3000 \
 -p 8086:8086 \
@@ -35,3 +35,7 @@ docker run -d \
 -e ALERT_SENDER=$sendaddr \
 -e NODES=$nodes \
 munin-server
+
+docker exec -it muninserver /bin/bash
+service grafana-service start
+exit
