@@ -1,3 +1,5 @@
+apt-get install docker.io
+
 docker build -t munin-server .
 echo "Please input munin_users="
 read  muninuser
