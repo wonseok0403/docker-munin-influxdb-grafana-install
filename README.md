@@ -1,7 +1,8 @@
-# Docker image for munin server
+# Auto install server-monitor using dockers. (Munin-InfluxDB-Grafana)
 
 ## Configuration
 
+You don't need to set.
 All the configuration is done through the environment.
 
 ### HTTP Credentials 
@@ -51,7 +52,15 @@ For a bit of persistency
 * /var/run/munin   -> lock and pid files
 * /var/cache/munin -> file deserved by HTTP
 
-## How to use the image
+## Requirments
+* Docker (apt-get install docker.io)
+
+## How to start
+* git clone https://github.com/wonseok0403/docker-munin-server.git
+* cd docker-munin-server
+* ./start.sh
+
+## How to manage the image
 
 ```
 docker build -t munin-server .
