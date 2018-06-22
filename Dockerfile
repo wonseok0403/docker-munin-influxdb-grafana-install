@@ -7,7 +7,7 @@ ENV INFLUXDB_VERSION 1.5.3
 RUN adduser --system --home /var/lib/munin --shell /bin/false --uid 1103 --group munin
 
 RUN apt-get update -qq && RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y -qq cron munin munin-node nginx wget heirloom-mailx patch spawn-fcgi libcgi-fast-perl curl
+    apt-get install -y -qq python python-pip cron munin munin-node nginx wget heirloom-mailx patch spawn-fcgi libcgi-fast-perl curl
 RUN rm /etc/nginx/sites-enabled/default && mkdir -p /var/cache/munin/www && chown munin:munin /var/cache/munin/www && mkdir -p /var/run/munin && chown -R munin:munin /var/run/munin
 
 # InfluxDB Install
@@ -45,15 +45,35 @@ RUN service grafana-server restart
 VOLUME /var/lib/munin
 VOLUME /var/log/munin
 
+# munin ADD
 ADD ./munin.conf /etc/munin/munin.conf
 ADD ./nginx.conf /etc/nginx/nginx.conf
 ADD ./nginx-munin /etc/nginx/sites-enabled/munin
 ADD ./start-munin.sh /munin
 ADD ./munin-graph-logging.patch /usr/share/munin
 ADD ./munin-update-logging.patch /usr/share/munin
+# grafana ADD
+ADD ./start-grafana.sh /grafana
 
 RUN cd /usr/share/munin && patch munin-graph < munin-graph-logging.patch && patch munin-update < munin-update-logging.patch
 
+RUN /bin/bash -c "apt-get install python-pip -y"
+RUN /bin/bash -c "wget https://bootstrap.pypa.io/get-pip.py"
+RUN /bin/bash -c "python get-pip.py"
+RUN /bin/bash -c "apt-get purge --auto-remove python-urllib3 -y"
+RUN /bin/bash -c "pip install requests==2.17.0 "
+RUN /bin/bash -c "apt-get -qq remove python-setuptools"
+# Do not change procedure never!
+RUN /bin/bash -c "pip install -U pip setuptools"
+RUN /bin/bash -c "pip install -U pip beautifulsoup4"
+RUN /bin/bash -c "git init"
+RUN /bin/bash -c "git pull https://github.com/wonseok0403/munin-influxdb.git "
+RUN /bin/bash -c "python /setup.py install"
+
+
+
+
+
 EXPOSE 8080
 EXPOSE 3000
-CMD ["bash", "/munin"]
+CMD /munin ; service grafana-server start;python setup.py install;service influxdb start

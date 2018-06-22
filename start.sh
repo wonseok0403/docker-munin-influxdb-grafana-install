@@ -1,4 +1,4 @@
-apt-get install docker.io
+apt-get install docker.io -y
 
 docker build -t munin-server .
 echo "Please input munin_users="
