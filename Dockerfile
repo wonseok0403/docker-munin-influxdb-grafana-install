@@ -7,7 +7,7 @@ ENV INFLUXDB_VERSION 1.5.3
 RUN adduser --system --home /var/lib/munin --shell /bin/false --uid 1103 --group munin
 
 RUN apt-get update -qq && RUNLEVEL=1 DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y -qq python python-pip cron munin munin-node nginx wget heirloom-mailx patch spawn-fcgi libcgi-fast-perl curl
+    apt-get install -y -qq python git python-pip cron munin munin-node nginx wget heirloom-mailx patch spawn-fcgi libcgi-fast-perl curl
 RUN rm /etc/nginx/sites-enabled/default && mkdir -p /var/cache/munin/www && chown munin:munin /var/cache/munin/www && mkdir -p /var/run/munin && chown -R munin:munin /var/run/munin
 
 # InfluxDB Install
@@ -76,4 +76,4 @@ RUN /bin/bash -c "python /setup.py install"
 
 EXPOSE 8080
 EXPOSE 3000
-CMD /munin ; service grafana-server start;python setup.py install;service influxdb start
+CMD /munin ; service grafana-service start;service influxdb start;python setup.py install
