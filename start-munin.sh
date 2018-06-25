@@ -18,6 +18,9 @@ chown -R munin:munin /var/lib/munin
 chown -R munin:munin /var/run/munin
 chown -R munin:munin /var/cache/munin
 
+service grafana-server start
+service influxdb start
+
 if [ "${SMTP_USE_TLS}" = true ] ; then
   cat >> "${MAIL_CONF_PATH}" <<EOF
 set smtp-use-starttls
