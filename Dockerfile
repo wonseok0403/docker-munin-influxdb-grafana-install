@@ -76,4 +76,4 @@ RUN /bin/bash -c "python /setup.py install"
 
 EXPOSE 8080
 EXPOSE 3000
-CMD /munin ; service grafana-service start;service influxdb start;python setup.py install
+CMD /munin ; /grafana;service influxdb start;python setup.py install
