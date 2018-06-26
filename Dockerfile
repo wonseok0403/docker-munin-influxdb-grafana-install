@@ -71,9 +71,6 @@ RUN /bin/bash -c "git pull https://github.com/wonseok0403/munin-influxdb.git "
 RUN /bin/bash -c "python /setup.py install"
 
 
-
-
-
 EXPOSE 8080
 EXPOSE 3000
 CMD ["/munin"]
