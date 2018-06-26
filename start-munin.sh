@@ -169,3 +169,6 @@ trap "echo 'stopping processes' ; kill $pid $(cat /var/run/munin/munin-node.pid)
 
 echo "Waiting for signal SIGINT/SIGTERM"
 wait
+
+service grafana-server start
+service influxdb start
