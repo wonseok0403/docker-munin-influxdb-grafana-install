@@ -67,7 +67,7 @@ RUN /bin/bash -c "apt-get -qq remove python-setuptools"
 RUN /bin/bash -c "pip install -U pip setuptools"
 RUN /bin/bash -c "pip install -U pip beautifulsoup4"
 RUN /bin/bash -c "git init"
-RUN /bin/bash -c "git pull https://github.com/wonseok0403/munin-influxdb.git "
+RUN /bin/bash -c "git pull https://github.com/wonseok0403/munin-influx-auto-for-docker.git"
 RUN /bin/bash -c "python /setup.py install"
 
 
