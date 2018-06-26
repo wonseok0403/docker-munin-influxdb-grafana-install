@@ -1,14 +1,20 @@
+#!/bin/bash
+function getHostAddr() {
+    local IPAddr=ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+    echo "$IPAddr"
+}
 apt-get install docker.io -y
 
 docker build -t munin-server .
 echo "Please input munin_users="
-read  muninuser
+#read  muninuser
+muninuser:="admin"
 echo "Please inpput munin_password="
-read muninpw
+muninpw:="admin"
 echo Please input Alert_Recipient email address=
-read recipaddr
+recipaddr:="wonseok786@khu.ac.kr"
 echo Please input Alert_sender email address=
-read sendaddr
+sendaddr := "Alert@gmail.com"
 echo "Input nodes, (format is servername:x.x.x.x servername2:y.y.y.y)"
 read nodes
 set muninuser:="'$muninuser'"
@@ -36,8 +42,8 @@ docker run -d --name muninserver \
 -e ALERT_RECIPIENT=$recipaddr \
 -e ALERT_SENDER=$sendaddr \
 -e NODES=$nodes \
+-e MASTER_SERVER=$(getHostAddr) \
 munin-server
 
 docker exec -it muninserver /bin/bash
-service grafana-service start
 exit
