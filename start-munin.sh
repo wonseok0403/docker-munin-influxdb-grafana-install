@@ -172,3 +172,5 @@ wait
 
 service grafana-server start
 service influxdb start
+cd /
+./start import
