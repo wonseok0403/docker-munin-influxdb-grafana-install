@@ -163,6 +163,7 @@ echo "Tailing syslog and munin-update log..."
 tail -F /var/log/syslog /var/log/munin/munin-update.log & pid=$!
 echo "tail -F running in $pid"
 
+
 sleep 1
 
 trap "echo 'stopping processes' ; kill $pid $(cat /var/run/munin/munin-node.pid) $(cat /var/run/nginx.pid) $(cat /var/run/crond.pid) $(cat /var/run/rsyslogd.pid)" SIGTERM SIGINT
@@ -174,3 +175,4 @@ service grafana-server start
 service influxdb start
 cd /
 ./start import
+
