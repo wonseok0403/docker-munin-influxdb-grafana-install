@@ -37,6 +37,7 @@ docker run -d --name muninserver \
 -p 8088:8088 \
 -p 2003:2003 \
 -p 4242:4242 \
+-p 4949:4949 \
 -p 8089:8089 \
 -p 25826:25826 \
 -v /var/log/munin:/var/log/munin \
